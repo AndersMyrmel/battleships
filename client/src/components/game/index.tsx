@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { board } from '../../types/board';
 import { createGrid, placeShips, ships } from '../../utils/index';
-import GameBoard from '../board';
+import Board from '../board';
 import './Game.css';
 
 function Game() {
@@ -15,10 +15,10 @@ function Game() {
   return (
     <div className="main">
       <div className="table">
-        <GameBoard grid={playerBoard} enemy="" />
+        <Board grid={playerBoard} enemy="" />
       </div>
       <div className="table">
-        <GameBoard grid={opponentBoard} enemy="e" />
+        <Board grid={opponentBoard} enemy="e" />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import './GameBoard.css';
+import './Board.css';
 import { board } from '../../types/board';
 
 type BoardProps = {
@@ -6,7 +6,7 @@ type BoardProps = {
   enemy: string;
 };
 
-function GameBoard({ grid, enemy }: BoardProps) {
+function Board({ grid, enemy }: BoardProps) {
   return (
     <div className="table">
       {grid.map((row, rowidx) => {
@@ -31,4 +31,4 @@ function GameBoard({ grid, enemy }: BoardProps) {
   );
 }
 
-export default GameBoard;
+export default Board;
