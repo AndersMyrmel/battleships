@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleships</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+      }
+      .table {
+        display: table;
+        margin-right: 50px;
+      }
+      .row {
+        display: table-row;
+      }
+      .cell {
+        display: table-cell;
+        border: 1px solid black;
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 700;
+      }
+      .outer {
+        background-color: rgb(37, 104, 72);
+        width: 60px;
+        height: 60px;
+        color: rgb(238, 238, 238);
+      }
+      .enemy {
+        background-color: rgb(196, 61, 61);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="table">
+      <div class="row">
+        <div class="cell outer"></div>
+        <div class="cell outer">0</div>
+        <div class="cell outer">1</div>
+        <div class="cell outer">2</div>
+        <div class="cell outer">3</div>
+        <div class="cell outer">4</div>
+      </div>
+      <div class="row">
+        <div class="cell outer">A</div>
+        <div id="00" class="cell"></div>
+        <div id="01" class="cell"></div>
+        <div id="02" class="cell"></div>
+        <div id="03" class="cell"></div>
+        <div id="04" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer">B</div>
+        <div id="10" class="cell"></div>
+        <div id="11" class="cell"></div>
+        <div id="12" class="cell"></div>
+        <div id="13" class="cell"></div>
+        <div id="14" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer">C</div>
+        <div id="20" class="cell"></div>
+        <div id="21" class="cell"></div>
+        <div id="22" class="cell"></div>
+        <div id="23" class="cell"></div>
+        <div id="24" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer">E</div>
+        <div id="30" class="cell"></div>
+        <div id="31" class="cell"></div>
+        <div id="32" class="cell"></div>
+        <div id="33" class="cell"></div>
+        <div id="34" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer">F</div>
+        <div id="40" class="cell"></div>
+        <div id="41" class="cell"></div>
+        <div id="42" class="cell"></div>
+        <div id="43" class="cell"></div>
+        <div id="44" class="cell"></div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="row">
+        <div class="cell outer enemy"></div>
+        <div class="cell outer enemy">0</div>
+        <div class="cell outer enemy">1</div>
+        <div class="cell outer enemy">2</div>
+        <div class="cell outer enemy">3</div>
+        <div class="cell outer enemy">4</div>
+      </div>
+      <div class="row">
+        <div class="cell outer enemy">A</div>
+        <div id="e00" class="cell"></div>
+        <div id="e01" class="cell"></div>
+        <div id="e02" class="cell"></div>
+        <div id="e03" class="cell"></div>
+        <div id="e04" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer enemy">B</div>
+        <div id="e10" class="cell"></div>
+        <div id="e11" class="cell"></div>
+        <div id="e12" class="cell"></div>
+        <div id="e13" class="cell"></div>
+        <div id="e14" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer enemy">C</div>
+        <div id="e20" class="cell"></div>
+        <div id="e21" class="cell"></div>
+        <div id="e22" class="cell"></div>
+        <div id="e23" class="cell"></div>
+        <div id="e24" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer enemy">E</div>
+        <div id="e30" class="cell"></div>
+        <div id="e31" class="cell"></div>
+        <div id="e32" class="cell"></div>
+        <div id="e33" class="cell"></div>
+        <div id="e34" class="cell"></div>
+      </div>
+      <div class="row">
+        <div class="cell outer enemy">F</div>
+        <div id="e40" class="cell"></div>
+        <div id="e41" class="cell"></div>
+        <div id="e42" class="cell"></div>
+        <div id="e43" class="cell"></div>
+        <div id="e44" class="cell"></div>
+      </div>
+    </div>
+    <script>
+      // rows, cols
+      const yourBoard = new Array(5).fill(0).map(() => new Array(5).fill(0));
+      const enemyBoard = new Array(5).fill(0).map(() => new Array(5).fill('?'));
+      const ships = [
+        [
+          [0, 0],
+          [0, 1],
+        ],
+        [
+          [1, 2],
+          [1, 3],
+          [1, 4],
+        ],
+        [
+          [2, 1],
+          [3, 1],
+          [4, 1],
+        ],
+      ];
+
+      drawBoard(yourBoard);
+      drawBoard(enemyBoard, 'e');
+      ships.forEach((ship) => placeShip(ship));
+
+      function drawBoard(board, enemy = '') {
+        board.forEach((row, i) =>
+          row.forEach((item, j) => {
+            document.getElementById(`${enemy}${i}${j}`).innerHTML = item;
+          })
+        );
+      }
+
+      function placeShip(ship) {
+        ship.forEach((index) => {
+          const [x, y] = index;
+          const ship = document.getElementById(`${x}${y}`);
+          ship.innerHTML = 1;
+          ship.style.color = 'red';
+        });
+      }
+    </script>
+  </body>
+</html>
