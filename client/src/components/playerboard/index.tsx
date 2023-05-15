@@ -1,7 +1,7 @@
 import './Board.css';
-import { BoardProps } from '../../types/BoardProps';
+import { grid } from '../../types/grid';
 
-function PlayerBoard({ grid }: BoardProps) {
+function PlayerBoard({ grid }: grid) {
   return (
     <div className="table e">
       {grid.map((row, rowidx) => {

@@ -1,7 +1,7 @@
 import '../playerboard/Board.css';
-import { BoardProps } from '../../types/BoardProps';
+import { grid } from '../../types/grid';
 
-interface EnemyProps extends BoardProps {
+interface EnemyProps extends grid {
   handleShot: (x: number, y: number) => void;
 }
 

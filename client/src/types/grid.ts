@@ -1,5 +1,5 @@
 import { board } from './board';
 
-export type BoardProps = {
+export type grid = {
   grid: board;
 };
