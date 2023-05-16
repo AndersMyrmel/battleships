@@ -13,7 +13,7 @@
 
 .cell {
   display: table-cell;
-  border: 1px solid rgb(117, 114, 114);
+  border: 1px solid rgba(156, 154, 154, 0.596);
   width: 100px;
   height: 100px;
   text-align: center;

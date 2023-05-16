@@ -30,12 +30,16 @@ function Game() {
     <div className="h-screen flex justify-center items-center">
       <div className="flex text-center">
         <div className="mx-8">
-          <h1 className="text-3xl font-bold">Place your ships</h1>
+          <h1 className="text-3xl font-poppins font-semibold w-2/3 h-14 inline-block">
+            Place your ships 🧭
+          </h1>
           <PlayerBoard grid={playerBoard} handleClick={placeShips} />
         </div>
 
         <div className="mx-8">
-          <h1 className="text-3xl font-bold">Shoot enemy</h1>
+          <h1 className="text-3xl font-poppins font-semibold w-2/3 h-14 inline-block">
+            Shoot the enemy 🗺️
+          </h1>
           <EnemyBoard grid={enemyBoard} handleClick={handleShot} />
         </div>
       </div>

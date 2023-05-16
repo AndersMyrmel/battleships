@@ -15,7 +15,7 @@ function EnemyBoard({ grid, handleClick }: grid) {
                   key={cellidx}
                   onClick={() => handleClick(rowidx, cellidx)}
                 >
-                  {cell > 1 ? '?' : cell}
+                  {cell > 1 ? '⚓' : cell === 1 ? '🎯' : '🌊'}
                 </div>
               );
             })}
