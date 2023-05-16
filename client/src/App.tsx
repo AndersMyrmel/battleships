@@ -1,7 +1,6 @@
 import { io } from 'socket.io-client';
 import { useEffect } from 'react';
 import Game from './components/game';
-import './App.css';
 
 const username = prompt('Enter username');
 
@@ -19,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <div className="main">
+    <div>
       <Game />
     </div>
   );

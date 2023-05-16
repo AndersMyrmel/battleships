@@ -1,6 +1,5 @@
 .table {
   display: table;
-  margin-right: 50px;
   color: rgb(37, 104, 72);
 }
 
@@ -19,5 +18,6 @@
   height: 100px;
   text-align: center;
   vertical-align: middle;
-  font-weight: 700;
+  font-weight: 400;
+  font-size: xx-large;
 }
