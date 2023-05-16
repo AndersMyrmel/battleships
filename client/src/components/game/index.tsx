@@ -7,7 +7,7 @@ import EnemyBoard from '../enemyboard';
 function Game() {
   const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
   const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
-  const [shipRemaining, setShipsRemaining] = useState(5);
+  const [shipRemaining, setShipsRemaining] = useState<number>(5);
 
   const placeShips = (x: number, y: number) => {
     const playerCopy = [...playerBoard];
@@ -34,9 +34,9 @@ function Game() {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="flex text-center">
-        <div className="mx-8">
+        <div className="mx-10">
           <div className="flex justify-between">
-            <h1 className="text-3xl font-poppins font-semibold w-2/3 h-14 inline-block">
+            <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
               Place your ships 🧭
             </h1>
             <h1 className="font-poppins font-semibold text-3xl">
@@ -46,10 +46,13 @@ function Game() {
           <PlayerBoard grid={playerBoard} handleClick={placeShips} />
         </div>
 
-        <div className="mx-8">
-          <h1 className="text-3xl font-poppins font-semibold w-2/3 h-14 inline-block">
-            Shoot the enemy 🗺️
-          </h1>
+        <div className="mx-10">
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
+              Shoot the enemy 🗺️
+            </h1>
+            <h1 className="font-poppins font-semibold text-3xl">💣 x3</h1>
+          </div>
           <EnemyBoard grid={enemyBoard} handleClick={handleShot} />
         </div>
       </div>
