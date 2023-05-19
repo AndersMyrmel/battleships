@@ -17,3 +17,5 @@ Bonus tip: Try styling your game with animation
 - Implement turn system
 - Display player's & opponent's name
 - Hide / change color / display some animation if opponent leaves
+- Game state -> use reducer
+- Header
