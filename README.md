@@ -13,3 +13,7 @@ Battleship is a multiplayer game in which a few ships are randomly arranged in a
 Well, later on, you can also sell this game and earn some cash.
 
 Bonus tip: Try styling your game with animation
+
+Implement turn system
+Display player's & opponent's name
+Hide / change color / display some animation if opponent leaves
