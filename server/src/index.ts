@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(server);
 
+app.use(cors);
+const io = new Server(server);
 const users = {};
+
 io.on('connection', (client) => {
   client.on('username', (username) => {
     const user = {
@@ -15,6 +18,11 @@ io.on('connection', (client) => {
     users[client.id] = user;
     io.emit('connected', user);
     console.log(`${username} connected`);
+  });
+
+  client.on('disconnect', () => {
+    console.log(`${users[client.id].name} disconnected`);
+    delete users[client.id];
   });
 });
 

@@ -1,26 +1,29 @@
-import { io } from 'socket.io-client';
-import { useEffect } from 'react';
+import { SocketContext, SocketProvider } from './context/SocketProvider';
+import { useEffect, useContext } from 'react';
 import Game from './components/game';
 
 const username = prompt('Enter username');
 
-const socket = io('http://localhost:3000', {
-  transports: ['websocket', 'polling'],
-});
-
 function App() {
+  const socket = useContext(SocketContext);
+
   useEffect(() => {
     socket.on('connect', () => {
       socket.emit('username', username);
     });
 
-    socket.on('connected', (user) => console.log(user.name));
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
   }, []);
 
   return (
-    <div>
-      <Game />
-    </div>
+    <SocketProvider>
+      <div>
+        <Game />
+      </div>
+    </SocketProvider>
   );
 }
 
