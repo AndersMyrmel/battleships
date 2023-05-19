@@ -8,8 +8,10 @@ function Game() {
   const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
   const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
   const [shipRemaining, setShipsRemaining] = useState<number>(5);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const placeShips = (x: number, y: number) => {
+    if (submitted) return;
     const playerCopy = [...playerBoard];
 
     if (playerCopy[x][y] === 0 && shipRemaining > 0)
@@ -31,6 +33,11 @@ function Game() {
     }
   };
 
+  const handleClick = () => {
+    setSubmitted(true);
+    // Pass player board to server
+  };
+
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="flex text-center">
@@ -40,10 +47,21 @@ function Game() {
               Place your ships 🧭
             </h1>
             <h1 className="font-poppins font-semibold text-3xl">
-              🚢 x{shipRemaining}
+              🚢 {submitted ? `✔️` : `x${shipRemaining}`}
             </h1>
           </div>
           <PlayerBoard grid={playerBoard} handleClick={placeShips} />
+
+          <button
+            className={
+              submitted
+                ? 'invisible mt-5 h-12'
+                : 'bg-green-700 hover:bg-green-800 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
+            }
+            onClick={handleClick}
+          >
+            Submit
+          </button>
         </div>
 
         <div className="mx-10">

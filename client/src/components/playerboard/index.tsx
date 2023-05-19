@@ -10,7 +10,7 @@ function PlayerBoard({ grid, handleClick }: grid) {
             {row.map((cell, cellidx) => {
               return (
                 <div
-                  className={`cell`}
+                  className="cell"
                   id={`${rowidx}${cellidx}`}
                   key={cellidx}
                   onClick={() => handleClick(rowidx, cellidx)}
