@@ -1,14 +1,34 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { SocketContext } from '../../context/SocketProvider';
 import { board } from '../../types/board';
 import { createGrid } from '../../utils/index';
 import PlayerBoard from '../playerboard';
 import EnemyBoard from '../enemyboard';
 
 function Game() {
+  const socket = useContext(SocketContext);
   const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
   const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
   const [shipRemaining, setShipsRemaining] = useState<number>(5);
   const [submitted, setSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    socket.on('miss', (x, y) => {
+      const enemyCopy = [...enemyBoard];
+      (enemyCopy[x][y] = 0), setEnemyBoard(enemyCopy);
+    });
+
+    socket.on('hit', (x, y) => {
+      const enemyCopy = [...enemyBoard];
+      enemyCopy[x][y] = 1;
+      setEnemyBoard(enemyCopy);
+    });
+
+    socket.on('struck', (x, y) => {
+      const playerCopy = [...playerBoard];
+      (playerCopy[x][y] = 2), setPlayerBoard(playerCopy);
+    });
+  }, [socket, playerBoard, enemyBoard]);
 
   const placeShips = (x: number, y: number) => {
     if (submitted) return;
@@ -22,20 +42,14 @@ function Game() {
   };
 
   const handleShot = (x: number, y: number) => {
-    const enemyCopy = [...enemyBoard];
-    const playerCopy = [...playerBoard];
-
-    if (playerBoard[x][y] === 0)
-      (enemyCopy[x][y] = 0), setEnemyBoard(enemyCopy);
-    else {
-      (enemyCopy[x][y] = 1), (playerCopy[x][y] = 2);
-      setEnemyBoard(enemyCopy), setPlayerBoard(playerCopy);
-    }
+    if (!submitted) return;
+    console.log('shot');
+    socket.emit('shot', x, y);
   };
 
   const handleClick = () => {
     setSubmitted(true);
-    // Pass player board to server
+    socket.emit('submitboard', playerBoard);
   };
 
   return (

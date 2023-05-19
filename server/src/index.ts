@@ -4,25 +4,37 @@ const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
+const events = require('./helpers');
 
 app.use(cors);
 const io = new Server(server);
 const users = {};
+let roomCount = 1;
 
 io.on('connection', (client) => {
   client.on('username', (username) => {
-    const user = {
-      name: username,
-      id: client.id,
-    };
-    users[client.id] = user;
-    io.emit('connected', user);
-    console.log(`${username} connected`);
+    events.handleUsername(io, client, users, username, roomCount);
+    roomCount += 1;
+  });
+
+  client.on('submitboard', (board) => {
+    events.handleSubmitBoard(client, users, board);
+  });
+
+  client.on('shot', async (x, y) => {
+    const [id, room] = client.rooms;
+    const clients = io.sockets.adapter.rooms.get(room);
+    const opponent = [...clients].filter((item) => item !== id).toString();
+
+    if (users[opponent].board[x][y] === 0) io.to(id).emit('miss', x, y);
+    else {
+      io.to(id).emit('hit', x, y);
+      io.to(opponent).emit('struck', x, y);
+    }
   });
 
   client.on('disconnect', () => {
-    console.log(`${users[client.id].name} disconnected`);
-    delete users[client.id];
+    events.handleDisconnect(client, users);
   });
 });
 

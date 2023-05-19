@@ -2,7 +2,9 @@ import { SocketContext, SocketProvider } from './context/SocketProvider';
 import { useEffect, useContext } from 'react';
 import Game from './components/game';
 
-const username = prompt('Enter username');
+let username: string | null;
+do username = prompt('Enter username');
+while (username !== null && username === '');
 
 function App() {
   const socket = useContext(SocketContext);
@@ -16,7 +18,7 @@ function App() {
       socket.off('connect');
       socket.off('disconnect');
     };
-  }, []);
+  }, [socket]);
 
   return (
     <SocketProvider>
