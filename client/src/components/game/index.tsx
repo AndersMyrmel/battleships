@@ -5,14 +5,29 @@ import { createGrid } from '../../utils/index';
 import PlayerBoard from '../playerboard';
 import EnemyBoard from '../enemyboard';
 
-function Game() {
+interface Username {
+  username: string | null;
+}
+
+function Game({ username }: Username) {
   const socket = useContext(SocketContext);
   const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
   const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
   const [shipRemaining, setShipsRemaining] = useState<number>(5);
+  const [bombsRemaining, setBombsRemaining] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [opponentName, setOpponentName] = useState<string>();
 
   useEffect(() => {
+    socket.on('opponent', (name) => {
+      setOpponentName(name);
+    });
+
+    socket.on('ready', (name) => {
+      setBombsRemaining(2);
+      setOpponentName(`${name} ✔️`);
+    });
+
     socket.on('miss', (x, y) => {
       const enemyCopy = [...enemyBoard];
       (enemyCopy[x][y] = 0), setEnemyBoard(enemyCopy);
@@ -24,11 +39,17 @@ function Game() {
       setEnemyBoard(enemyCopy);
     });
 
+    socket.on('missed', () => {
+      setBombsRemaining(bombsRemaining + 1);
+      console.log('missed');
+    });
+
     socket.on('struck', (x, y) => {
+      setBombsRemaining(bombsRemaining + 1);
       const playerCopy = [...playerBoard];
       (playerCopy[x][y] = 2), setPlayerBoard(playerCopy);
     });
-  }, [socket, playerBoard, enemyBoard]);
+  }, [socket, enemyBoard, playerBoard, bombsRemaining]);
 
   const placeShips = (x: number, y: number) => {
     if (submitted) return;
@@ -42,12 +63,16 @@ function Game() {
   };
 
   const handleShot = (x: number, y: number) => {
-    if (!submitted) return;
-    console.log('shot');
+    if (!submitted || bombsRemaining < 1) return;
+    if (enemyBoard[x][y] !== 2) return;
+    setBombsRemaining(bombsRemaining - 1);
     socket.emit('shot', x, y);
   };
 
   const handleClick = () => {
+    if (!opponentName) return alert('Please wait for opponent');
+    if (shipRemaining > 0)
+      return alert('Place all your ships before submitting');
     setSubmitted(true);
     socket.emit('submitboard', playerBoard);
   };
@@ -56,6 +81,9 @@ function Game() {
     <div className="h-screen flex justify-center items-center">
       <div className="flex text-center">
         <div className="mx-10">
+          <h1 className="text-3xl font-poppins font-medium my-16">
+            {username}
+          </h1>
           <div className="flex justify-between">
             <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
               Place your ships 🧭
@@ -79,11 +107,16 @@ function Game() {
         </div>
 
         <div className="mx-10">
+          <h1 className="text-3xl font-poppins font-medium my-16">
+            {opponentName ?? 'Waiting for player...'}
+          </h1>
           <div className="flex justify-between">
             <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
               Shoot the enemy 🗺️
             </h1>
-            <h1 className="font-poppins font-semibold text-3xl">💣 x3</h1>
+            <h1 className="font-poppins font-semibold text-3xl">
+              💣 x{bombsRemaining}
+            </h1>
           </div>
           <EnemyBoard grid={enemyBoard} handleClick={handleShot} />
         </div>

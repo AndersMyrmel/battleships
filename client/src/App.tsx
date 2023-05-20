@@ -23,7 +23,7 @@ function App() {
   return (
     <SocketProvider>
       <div>
-        <Game />
+        <Game username={username} />
       </div>
     </SocketProvider>
   );
