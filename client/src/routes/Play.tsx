@@ -96,7 +96,7 @@ function Play({ username }: Username) {
             className={
               submitted
                 ? 'invisible mt-5 h-12'
-                : 'bg-green-700 hover:bg-green-800 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
+                : 'bg-green-700 hover:bg-green-600 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
             }
             onClick={handleSubmit}
           >

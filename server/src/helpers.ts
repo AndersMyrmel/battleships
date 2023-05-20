@@ -28,6 +28,34 @@ const events = (io, client, users: User) => {
     }
   };
 
+  const handleCreateGame = (username: string) => {
+    const user = {
+      name: username,
+      id: client.id,
+    };
+    users[client.id] = user;
+
+    const roomId = username;
+    client.join(`bs-${roomId}`);
+  };
+
+  const handleJoinGame = (username: string, hostname: string) => {
+    const user = {
+      name: username,
+      id: client.id,
+    };
+    users[client.id] = user;
+
+    const roomId = hostname;
+    client.join(`bs-${roomId}`);
+
+    const opponent = getOpponent();
+    if (opponent) {
+      io.to(client.id).emit('opponent', users[opponent].name);
+      io.to(opponent).emit('opponent', users[client.id].name);
+    }
+  };
+
   const handleSubmitBoard = (board: number[][]) => {
     users[client.id].board = board;
     const opponent = getOpponent();
@@ -54,7 +82,14 @@ const events = (io, client, users: User) => {
     return opponent;
   };
 
-  return { handleDisconnect, handleUsername, handleSubmitBoard, handleShot };
+  return {
+    handleDisconnect,
+    handleUsername,
+    handleCreateGame,
+    handleJoinGame,
+    handleSubmitBoard,
+    handleShot,
+  };
 };
 
 module.exports = { events };

@@ -12,12 +12,26 @@ const users = {};
 let roomCount = 1;
 
 io.on('connection', (client) => {
-  const { handleDisconnect, handleUsername, handleSubmitBoard, handleShot } =
-    events(io, client, users);
+  const {
+    handleDisconnect,
+    handleUsername,
+    handleCreateGame,
+    handleJoinGame,
+    handleSubmitBoard,
+    handleShot,
+  } = events(io, client, users);
 
   client.on('username', (username: string) => {
     handleUsername(username, roomCount);
     roomCount += 1;
+  });
+
+  client.on('creategame', (username: string) => {
+    handleCreateGame(username);
+  });
+
+  client.on('joingame', (username: string, hostname: string) => {
+    handleJoinGame(username, hostname);
   });
 
   client.on('submitboard', (board: number[][]) => {
