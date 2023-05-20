@@ -34,7 +34,8 @@ const playHandler = (
     if (
       !state.submitted ||
       state.bombsRemaining < 1 ||
-      state.enemyBoard[x][y] !== 2
+      state.enemyBoard[x][y] !== 2 ||
+      state.gameOver
     )
       return;
 

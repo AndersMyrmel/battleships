@@ -19,12 +19,17 @@ function Play({ username }: Username) {
     handleHit,
     handleMissed,
     handleStruck,
-  } = events(state, dispatch);
+    handleLoss,
+  } = events(state, dispatch, socket);
   const { placeShips, handleSubmit, handleShot } = playHandler(
     socket,
     state,
     dispatch
   );
+
+  useEffect(() => {
+    dispatch({ type: 'setusername', payload: location.state.username });
+  }, []);
 
   useEffect(() => {
     socket.on('opponent', (name) => setOpponent(name));
@@ -33,6 +38,7 @@ function Play({ username }: Username) {
     socket.on('hit', (x, y) => handleHit(x, y));
     socket.on('missed', () => handleMissed());
     socket.on('struck', (x, y) => handleStruck(x, y));
+    socket.on('loss', (name) => handleLoss(name));
   }, [socket, state.bombsRemaining]);
 
   return (
@@ -40,7 +46,7 @@ function Play({ username }: Username) {
       <div className="flex text-center">
         <div className="mx-10">
           <h1 className="text-3xl font-poppins font-medium my-16">
-            {location.state.username}
+            {state.username}
           </h1>
           <div className="flex justify-between">
             <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">

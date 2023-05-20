@@ -1,10 +1,13 @@
 export interface PlayState {
   playerBoard: number[][];
   enemyBoard: number[][];
+  username: string;
   opponentName: string;
   submitted: boolean;
   shipsRemaining: number;
   bombsRemaining: number;
+  hits: number;
+  gameOver: boolean;
 }
 
 interface APlayerBoard {
@@ -15,6 +18,11 @@ interface APlayerBoard {
 interface AEnemyBoard {
   type: 'setenemyboard';
   payload: number[][];
+}
+
+interface AUsername {
+  type: 'setusername';
+  payload: string;
 }
 
 interface AOpponentName {
@@ -37,6 +45,16 @@ interface ABombs {
   payload: number;
 }
 
+interface AHits {
+  type: 'sethits';
+  payload: number;
+}
+
+interface AGameOver {
+  type: 'setgameover';
+  payload: boolean;
+}
+
 interface AMultiple {
   type: 'setmultiple';
   payload: unknown;
@@ -45,8 +63,11 @@ interface AMultiple {
 export type Action =
   | APlayerBoard
   | AEnemyBoard
+  | AUsername
   | AOpponentName
   | ASubmitted
   | AShips
   | ABombs
+  | AHits
+  | AGameOver
   | AMultiple;

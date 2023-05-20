@@ -1,6 +1,12 @@
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { PlayState, Action } from '../../types/PlayType';
 
-const events = (state: PlayState, dispatch: React.Dispatch<Action>) => {
+const events = (
+  state: PlayState,
+  dispatch: React.Dispatch<Action>,
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>
+) => {
   const setOpponent = (name: string) => {
     dispatch({ type: 'setopponentname', payload: `${name} ⌛` });
   };
@@ -24,7 +30,12 @@ const events = (state: PlayState, dispatch: React.Dispatch<Action>) => {
   const handleHit = (x: number, y: number) => {
     const enemyCopy = [...state.enemyBoard];
     enemyCopy[x][y] = 1;
-    dispatch({ type: 'setenemyboard', payload: enemyCopy });
+    if (state.hits === 4) handleWin();
+
+    dispatch({
+      type: 'setmultiple',
+      payload: { enemyBoard: enemyCopy, hits: state.hits + 1 },
+    });
   };
 
   const handleMissed = () => {
@@ -44,6 +55,30 @@ const events = (state: PlayState, dispatch: React.Dispatch<Action>) => {
     });
   };
 
+  const handleWin = () => {
+    socket.emit('gameover', state.username);
+    dispatch({
+      type: 'setmultiple',
+      payload: {
+        username: `${state.username} 🏆`,
+        opponentName: state.opponentName.replace('✔️', '💀'),
+        gameOver: true,
+      },
+    });
+  };
+
+  const handleLoss = (name: string) => {
+    console.log(state.opponentName);
+    dispatch({
+      type: 'setmultiple',
+      payload: {
+        username: `${state.username} 💀`,
+        opponentName: `${name} 🏆`,
+        gameOver: true,
+      },
+    });
+  };
+
   return {
     setOpponent,
     setReady,
@@ -51,6 +86,7 @@ const events = (state: PlayState, dispatch: React.Dispatch<Action>) => {
     handleHit,
     handleMissed,
     handleStruck,
+    handleLoss,
   };
 };
 
