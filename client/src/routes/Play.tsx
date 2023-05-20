@@ -1,16 +1,18 @@
 import { useState, useContext, useEffect } from 'react';
-import { SocketContext } from '../../context/SocketProvider';
-import { board } from '../../types/board';
-import { createGrid } from '../../utils/index';
-import PlayerBoard from '../playerboard';
-import EnemyBoard from '../enemyboard';
+import { useLocation } from 'react-router-dom';
+import { SocketContext } from '../context/SocketProvider';
+import { board } from '../types/board';
+import { createGrid } from '../utils/index';
+import PlayerBoard from '../components/playerboard';
+import EnemyBoard from '../components/enemyboard';
 
 interface Username {
   username: string | null;
 }
 
-function Game({ username }: Username) {
+function Play({ username }: Username) {
   const socket = useContext(SocketContext);
+  const location = useLocation();
   const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
   const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
   const [shipRemaining, setShipsRemaining] = useState<number>(5);
@@ -79,7 +81,7 @@ function Game({ username }: Username) {
       <div className="flex text-center">
         <div className="mx-10">
           <h1 className="text-3xl font-poppins font-medium my-16">
-            {username}
+            {location.state.username}
           </h1>
           <div className="flex justify-between">
             <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
@@ -121,4 +123,4 @@ function Game({ username }: Username) {
   );
 }
 
-export default Game;
+export default Play;

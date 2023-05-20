@@ -6,7 +6,7 @@ interface User {
 
 const events = (io, client, users: User) => {
   const handleDisconnect = () => {
-    console.log(`${users[client.id].name} disconnected`);
+    // TODO: Socket.leave room & display in client
     delete users[client.id];
   };
 
