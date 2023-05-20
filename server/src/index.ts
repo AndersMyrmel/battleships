@@ -15,16 +15,16 @@ io.on('connection', (client) => {
   const { handleDisconnect, handleUsername, handleSubmitBoard, handleShot } =
     events(io, client, users);
 
-  client.on('username', (username) => {
+  client.on('username', (username: string) => {
     handleUsername(username, roomCount);
     roomCount += 1;
   });
 
-  client.on('submitboard', (board) => {
+  client.on('submitboard', (board: number[][]) => {
     handleSubmitBoard(board);
   });
 
-  client.on('shot', (x, y) => {
+  client.on('shot', (x: number, y: number) => {
     handleShot(x, y);
   });
 

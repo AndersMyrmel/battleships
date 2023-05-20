@@ -20,7 +20,7 @@ function Game({ username }: Username) {
 
   useEffect(() => {
     socket.on('opponent', (name) => {
-      setOpponentName(name);
+      setOpponentName(`${name} ⌛`);
     });
 
     socket.on('ready', (name) => {
@@ -41,7 +41,6 @@ function Game({ username }: Username) {
 
     socket.on('missed', () => {
       setBombsRemaining(bombsRemaining + 1);
-      console.log('missed');
     });
 
     socket.on('struck', (x, y) => {
@@ -49,7 +48,7 @@ function Game({ username }: Username) {
       const playerCopy = [...playerBoard];
       (playerCopy[x][y] = 2), setPlayerBoard(playerCopy);
     });
-  }, [socket, enemyBoard, playerBoard, bombsRemaining]);
+  }, [socket, playerBoard, enemyBoard, bombsRemaining]);
 
   const placeShips = (x: number, y: number) => {
     if (submitted) return;
@@ -63,16 +62,14 @@ function Game({ username }: Username) {
   };
 
   const handleShot = (x: number, y: number) => {
-    if (!submitted || bombsRemaining < 1) return;
-    if (enemyBoard[x][y] !== 2) return;
+    if (!submitted || bombsRemaining < 1 || enemyBoard[x][y] !== 2) return;
     setBombsRemaining(bombsRemaining - 1);
     socket.emit('shot', x, y);
   };
 
-  const handleClick = () => {
+  const handleSubmit = () => {
     if (!opponentName) return alert('Please wait for opponent');
-    if (shipRemaining > 0)
-      return alert('Place all your ships before submitting');
+    if (shipRemaining > 0) return alert('Place all your ships first');
     setSubmitted(true);
     socket.emit('submitboard', playerBoard);
   };
@@ -93,14 +90,13 @@ function Game({ username }: Username) {
             </h1>
           </div>
           <PlayerBoard grid={playerBoard} handleClick={placeShips} />
-
           <button
             className={
               submitted
                 ? 'invisible mt-5 h-12'
                 : 'bg-green-700 hover:bg-green-800 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
             }
-            onClick={handleClick}
+            onClick={handleSubmit}
           >
             Submit
           </button>
