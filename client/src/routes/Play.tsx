@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SocketContext } from '../context/SocketProvider';
-import { board } from '../types/board';
+import { Board } from '../types/Board';
 import { createGrid } from '../utils/index';
-import PlayerBoard from '../components/playerboard';
-import EnemyBoard from '../components/enemyboard';
+import PlayerBoard from '../components/PlayerBoard';
+import EnemyBoard from '../components/EnemyBoard';
 
 interface Username {
   username: string | null;
@@ -13,8 +13,8 @@ interface Username {
 function Play({ username }: Username) {
   const socket = useContext(SocketContext);
   const location = useLocation();
-  const [playerBoard, setPlayerBoard] = useState<board>(createGrid(5, 5, 0));
-  const [enemyBoard, setEnemyBoard] = useState<board>(createGrid(5, 5, 2));
+  const [playerBoard, setPlayerBoard] = useState<Board>(createGrid(5, 5, 0));
+  const [enemyBoard, setEnemyBoard] = useState<Board>(createGrid(5, 5, 2));
   const [shipRemaining, setShipsRemaining] = useState<number>(5);
   const [bombsRemaining, setBombsRemaining] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);

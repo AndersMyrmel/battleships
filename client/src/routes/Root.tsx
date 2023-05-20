@@ -9,17 +9,6 @@ function Root() {
   const [username, setUsername] = useState('');
   const [hostname, setHostName] = useState('');
 
-  const playOnline = () => {
-    if (!username) return alert('Enter username');
-
-    socket.emit('username', username);
-    navigate('Play', {
-      state: {
-        username: username,
-      },
-    });
-  };
-
   const createGame = () => {
     if (!username) return alert('Enter username');
     socket.emit('creategame', username);
@@ -45,6 +34,17 @@ function Root() {
         },
       });
     }
+  };
+
+  const playOnline = () => {
+    if (!username) return alert('Enter username');
+
+    socket.emit('username', username);
+    navigate('Play', {
+      state: {
+        username: username,
+      },
+    });
   };
 
   return (

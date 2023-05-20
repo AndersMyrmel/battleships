@@ -16,7 +16,6 @@ const events = (io, client, users: User) => {
       id: client.id,
     };
     users[client.id] = user;
-    io.emit('connected', user);
 
     const roomId = Math.ceil(count / 2);
     client.join(`bs-${roomId}`);

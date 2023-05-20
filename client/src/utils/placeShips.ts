@@ -1,5 +1,5 @@
 import { Dispatch } from 'react';
-import { board } from '../types/board';
+import { board } from '../types/Board';
 
 export const placeShips = (
   ships: board,

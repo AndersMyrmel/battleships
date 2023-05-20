@@ -1,6 +1,6 @@
-import { board } from './board';
+import { Board } from './Board';
 
-export type grid = {
-  grid: board;
+export type Grid = {
+  grid: Board;
   handleClick: (x: number, y: number) => void;
 };

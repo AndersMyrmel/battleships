@@ -1,1 +1,1 @@
-export type board = number[][];
+export type Board = number[][];
