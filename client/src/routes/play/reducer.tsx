@@ -1,4 +1,5 @@
 import { createGrid } from '../../utils';
+import { PlayState, Action } from '../../types/PlayType';
 
 export const INITIAL_STATE = {
   playerBoard: createGrid(5, 5, 0),
@@ -9,7 +10,7 @@ export const INITIAL_STATE = {
   bombsRemaining: 0,
 };
 
-export const Reducer = (state, action) => {
+export const Reducer = (state: PlayState, action: Action) => {
   switch (action.type) {
     case 'setplayerboard':
       return {
@@ -31,12 +32,12 @@ export const Reducer = (state, action) => {
         ...state,
         submitted: action.payload,
       };
-    case 'setshipsremaining':
+    case 'setships':
       return {
         ...state,
         shipsRemaining: action.payload,
       };
-    case 'setbombsremaining':
+    case 'setbombs':
       return {
         ...state,
         bombsRemaining: action.payload,

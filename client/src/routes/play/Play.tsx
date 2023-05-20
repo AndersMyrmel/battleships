@@ -2,6 +2,7 @@ import { useContext, useEffect, useReducer } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SocketContext } from '../../context/SocketProvider';
 import { Reducer, INITIAL_STATE } from './reducer';
+import { events } from './events';
 import PlayerBoard from '../../components/PlayerBoard';
 import EnemyBoard from '../../components/EnemyBoard';
 
@@ -13,51 +14,23 @@ function Play({ username }: Username) {
   const location = useLocation();
   const socket = useContext(SocketContext);
   const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);
+  const {
+    setOpponent,
+    setReady,
+    handleMiss,
+    handleHit,
+    handleMissed,
+    handleStruck,
+  } = events(state, dispatch);
 
   useEffect(() => {
-    socket.on('opponent', (name) => {
-      dispatch({ type: 'setopponentname', payload: `${name} ⌛` });
-    });
-
-    socket.on('ready', (name) => {
-      dispatch({
-        type: 'setmultiple',
-        payload: {
-          opponentName: `${name} ✔️`,
-          bombsRemaining: 2,
-        },
-      });
-    });
-
-    socket.on('miss', (x, y) => {
-      const enemyCopy = [...state.enemyBoard];
-      enemyCopy[x][y] = 0;
-      dispatch({ type: 'setenemyboard', payload: enemyCopy });
-    });
-
-    socket.on('hit', (x, y) => {
-      const enemyCopy = [...state.enemyBoard];
-      enemyCopy[x][y] = 1;
-      dispatch({ type: 'setenemyboard', payload: enemyCopy });
-    });
-
-    socket.on('missed', () => {
-      dispatch({
-        type: 'setbombsremaining',
-        payload: state.bombsRemaining + 1,
-      });
-    });
-
-    socket.on('struck', (x, y) => {
-      dispatch({
-        type: 'setbombsremaining',
-        payload: state.bombsRemaining + 1,
-      });
-      const playerCopy = [...state.playerBoard];
-      playerCopy[x][y] = 2;
-      dispatch({ type: 'setplayerboard', payload: playerCopy });
-    });
-  }, [socket, state.playerBoard, state.enemyBoard, state.bombsRemaining]);
+    socket.on('opponent', (name) => setOpponent(name));
+    socket.on('ready', (name) => setReady(name));
+    socket.on('miss', (x, y) => handleMiss(x, y));
+    socket.on('hit', (x, y) => handleHit(x, y));
+    socket.on('missed', () => handleMissed());
+    socket.on('struck', (x, y) => handleStruck(x, y));
+  }, [socket, state.bombsRemaining]);
 
   const placeShips = (x: number, y: number) => {
     if (state.submitted) return;
@@ -65,16 +38,10 @@ function Play({ username }: Username) {
 
     if (playerCopy[x][y] === 0 && state.shipsRemaining > 0) {
       playerCopy[x][y] = 1;
-      dispatch({
-        type: 'setshipsremaining',
-        payload: state.shipsRemaining - 1,
-      });
+      dispatch({ type: 'setships', payload: state.shipsRemaining - 1 });
     } else if (playerCopy[x][y] === 1) {
       playerCopy[x][y] = 0;
-      dispatch({
-        type: 'setshipsremaining',
-        payload: state.shipsRemaining + 1,
-      });
+      dispatch({ type: 'setships', payload: state.shipsRemaining + 1 });
     }
 
     dispatch({ type: 'setplayerboard', payload: playerCopy });
@@ -87,16 +54,15 @@ function Play({ username }: Username) {
       state.enemyBoard[x][y] !== 2
     )
       return;
-    dispatch({
-      type: 'setbombsremaining',
-      payload: state.bombsRemaining - 1,
-    });
+
+    dispatch({ type: 'setbombs', payload: state.bombsRemaining - 1 });
     socket.emit('shot', x, y);
   };
 
   const handleSubmit = () => {
     if (!state.opponentName) return alert('Please wait for opponent');
     if (state.shipsRemaining > 0) return alert('Place all your ships first');
+
     dispatch({ type: 'setsubmitted', payload: true });
     socket.emit('submitboard', state.playerBoard);
   };
