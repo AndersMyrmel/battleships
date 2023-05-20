@@ -2,13 +2,11 @@ import { useContext, useEffect, useReducer } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SocketContext } from '../../context/SocketProvider';
 import { Reducer, INITIAL_STATE } from './reducer';
+import { playHandler } from '../../utils/playHandler';
 import { events } from './events';
+import { Username } from '../../types/Username';
 import PlayerBoard from '../../components/PlayerBoard';
 import EnemyBoard from '../../components/EnemyBoard';
-
-interface Username {
-  username: string | null;
-}
 
 function Play({ username }: Username) {
   const location = useLocation();
@@ -22,6 +20,11 @@ function Play({ username }: Username) {
     handleMissed,
     handleStruck,
   } = events(state, dispatch);
+  const { placeShips, handleSubmit, handleShot } = playHandler(
+    socket,
+    state,
+    dispatch
+  );
 
   useEffect(() => {
     socket.on('opponent', (name) => setOpponent(name));
@@ -31,41 +34,6 @@ function Play({ username }: Username) {
     socket.on('missed', () => handleMissed());
     socket.on('struck', (x, y) => handleStruck(x, y));
   }, [socket, state.bombsRemaining]);
-
-  const placeShips = (x: number, y: number) => {
-    if (state.submitted) return;
-    const playerCopy = [...state.playerBoard];
-
-    if (playerCopy[x][y] === 0 && state.shipsRemaining > 0) {
-      playerCopy[x][y] = 1;
-      dispatch({ type: 'setships', payload: state.shipsRemaining - 1 });
-    } else if (playerCopy[x][y] === 1) {
-      playerCopy[x][y] = 0;
-      dispatch({ type: 'setships', payload: state.shipsRemaining + 1 });
-    }
-
-    dispatch({ type: 'setplayerboard', payload: playerCopy });
-  };
-
-  const handleShot = (x: number, y: number) => {
-    if (
-      !state.submitted ||
-      state.bombsRemaining < 1 ||
-      state.enemyBoard[x][y] !== 2
-    )
-      return;
-
-    dispatch({ type: 'setbombs', payload: state.bombsRemaining - 1 });
-    socket.emit('shot', x, y);
-  };
-
-  const handleSubmit = () => {
-    if (!state.opponentName) return alert('Please wait for opponent');
-    if (state.shipsRemaining > 0) return alert('Place all your ships first');
-
-    dispatch({ type: 'setsubmitted', payload: true });
-    socket.emit('submitboard', state.playerBoard);
-  };
 
   return (
     <div className="h-screen flex justify-center items-center">

@@ -39,7 +39,7 @@ interface ABombs {
 
 interface AMultiple {
   type: 'setmultiple';
-  payload: any;
+  payload: unknown;
 }
 
 export type Action =
