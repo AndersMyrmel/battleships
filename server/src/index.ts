@@ -19,6 +19,7 @@ io.on('connection', (client) => {
     handleJoinGame,
     handleSubmitBoard,
     handleShot,
+    handleGameOver,
   } = events(io, client, users);
 
   client.on('username', (username: string) => {
@@ -41,6 +42,8 @@ io.on('connection', (client) => {
   client.on('shot', (x: number, y: number) => {
     handleShot(x, y);
   });
+
+  client.on('gameover', handleGameOver);
 
   client.on('disconnect', handleDisconnect);
 });

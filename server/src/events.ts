@@ -74,6 +74,13 @@ const events = (io, client, users: User) => {
     }
   };
 
+  const handleGameOver = () => {
+    const opponent = getOpponent();
+    if (opponent) {
+      io.to(opponent).emit('loss', users[client.id].name);
+    }
+  };
+
   const getOpponent = () => {
     const [id, room] = client.rooms;
     const clients = io.sockets.adapter.rooms.get(room);
@@ -88,6 +95,7 @@ const events = (io, client, users: User) => {
     handleJoinGame,
     handleSubmitBoard,
     handleShot,
+    handleGameOver,
   };
 };
 
