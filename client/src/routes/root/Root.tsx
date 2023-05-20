@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SocketContext } from '../context/SocketProvider';
+import { SocketContext } from '../../context/SocketProvider';
 
 function Root() {
   const navigate = useNavigate();
