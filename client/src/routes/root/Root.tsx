@@ -1,48 +1,46 @@
-import { useContext, useState } from 'react';
+import { useContext, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../../context/SocketProvider';
+import { Reducer, INITIAL_STATE } from './reducer';
 
 function Root() {
   const navigate = useNavigate();
   const socket = useContext(SocketContext);
-  const [displayHost, setDisplayHost] = useState(false);
-  const [username, setUsername] = useState('');
-  const [hostname, setHostName] = useState('');
+  const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);
 
   const createGame = () => {
-    if (!username) return alert('Enter username');
-    socket.emit('creategame', username);
+    if (!state.username) return alert('Enter username');
 
+    socket.emit('creategame', state.username);
     navigate('Play', {
       state: {
-        username: username,
+        username: state.username,
       },
     });
   };
 
   const joinGame = () => {
-    setDisplayHost(true);
+    dispatch({ type: 'setdisplayhost', payload: true });
 
-    if (displayHost) {
-      if (!username) return alert('Enter username');
-      if (!hostname) return alert("Enter host's name");
-
-      socket.emit('joingame', username, hostname);
+    if (state.displayHost) {
+      if (!state.username) return alert('Enter username');
+      if (!state.hostname) return alert("Enter host's name");
+      socket.emit('joingame', state.username, state.hostname);
       navigate('Play', {
         state: {
-          username: username,
+          username: state.username,
         },
       });
     }
   };
 
   const playOnline = () => {
-    if (!username) return alert('Enter username');
+    if (!state.username) return alert('Enter username');
 
-    socket.emit('username', username);
+    socket.emit('username', state.username);
     navigate('Play', {
       state: {
-        username: username,
+        username: state.username,
       },
     });
   };
@@ -66,13 +64,15 @@ function Root() {
             id="username"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="John"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) =>
+              dispatch({ type: 'setusername', payload: e.target.value })
+            }
             required
           />
         </div>
       </div>
 
-      {displayHost && (
+      {state.displayHost && (
         <div className="mb-16 w-80">
           <div>
             <label
@@ -86,7 +86,9 @@ function Root() {
               id="username"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Kevin"
-              onChange={(e) => setHostName(e.target.value)}
+              onChange={(e) =>
+                dispatch({ type: 'sethostname', payload: e.target.value })
+              }
               required
             />
           </div>

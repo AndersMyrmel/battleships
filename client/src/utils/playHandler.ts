@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
-import { PlayState, Action } from '../types/PlayType';
+import { PlayState, Action } from '../types/PlayState';
 
 const playHandler = (
   socket: Socket<DefaultEventsMap, DefaultEventsMap>,

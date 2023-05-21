@@ -4,11 +4,10 @@ import { SocketContext } from '../../context/SocketProvider';
 import { Reducer, INITIAL_STATE } from './reducer';
 import { playHandler } from '../../utils/playHandler';
 import { events } from './events';
-import { Username } from '../../types/Username';
 import PlayerBoard from '../../components/PlayerBoard';
 import EnemyBoard from '../../components/EnemyBoard';
 
-function Play({ username }: Username) {
+function Play() {
   const location = useLocation();
   const socket = useContext(SocketContext);
   const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);

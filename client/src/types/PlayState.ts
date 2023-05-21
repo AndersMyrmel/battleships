@@ -57,7 +57,7 @@ interface AGameOver {
 
 interface AMultiple {
   type: 'setmultiple';
-  payload: unknown;
+  payload: any;
 }
 
 export type Action =

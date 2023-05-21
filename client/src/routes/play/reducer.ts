@@ -1,5 +1,5 @@
 import { createGrid } from '../../utils/createGrid';
-import { PlayState, Action } from '../../types/PlayType';
+import { PlayState, Action } from '../../types/PlayState';
 
 export const INITIAL_STATE = {
   playerBoard: createGrid(5, 5, 0),
@@ -7,10 +7,10 @@ export const INITIAL_STATE = {
   username: null,
   opponentName: null,
   submitted: false,
+  gameOver: false,
   shipsRemaining: 5,
   bombsRemaining: 0,
   hits: 0,
-  gameOver: false,
 };
 
 export const Reducer = (state: PlayState, action: Action) => {
@@ -40,6 +40,11 @@ export const Reducer = (state: PlayState, action: Action) => {
         ...state,
         submitted: action.payload,
       };
+    case 'setgameover':
+      return {
+        ...state,
+        gameOver: action.payload,
+      };
     case 'setships':
       return {
         ...state,
@@ -54,11 +59,6 @@ export const Reducer = (state: PlayState, action: Action) => {
       return {
         ...state,
         hits: action.payload,
-      };
-    case 'setgameover':
-      return {
-        ...state,
-        gameOver: action.payload,
       };
     case 'setmultiple':
       return {
