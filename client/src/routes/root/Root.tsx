@@ -36,8 +36,6 @@ function Root() {
   };
 
   const playOnline = () => {
-    //if (!state.username) return alert('Enter username');
-
     socket.emit('username', state.username);
     navigate('Play', {
       state: {
