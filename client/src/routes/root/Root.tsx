@@ -22,17 +22,15 @@ function Root() {
 
   const joinGame = () => {
     dispatch({ type: 'setdisplayhost', payload: true });
+    if (!state.displayHost) return;
+    if (!state.hostname) return alert("Enter host's name");
 
-    if (state.displayHost) {
-      if (!state.username) return alert('Enter username');
-      if (!state.hostname) return alert("Enter host's name");
-      socket.emit('joingame', state.username, state.hostname);
-      navigate('Play', {
-        state: {
-          username: state.username,
-        },
-      });
-    }
+    socket.emit('joingame', state.username, state.hostname);
+    navigate('Play', {
+      state: {
+        username: state.username,
+      },
+    });
   };
 
   const playOnline = () => {
