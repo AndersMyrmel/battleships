@@ -45,7 +45,7 @@ function Play() {
 
   return (
     <>
-      <Header username={state.username} />
+      <Header username={location.state.username} />
       <div className="h-full flex justify-center items-center">
         <div className="flex text-center">
           <div className="lg:mx-10 sm:mx-5 xs:mx-5">
