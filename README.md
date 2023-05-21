@@ -1,4 +1,4 @@
-# :ship: battleships
+# 🗺️ battleships
 
 ### [Play](https://dainty-blancmange-a09ae1.netlify.app/)
 
