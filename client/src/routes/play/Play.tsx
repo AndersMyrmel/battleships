@@ -20,6 +20,7 @@ function Play({ username }: Username) {
     handleMissed,
     handleStruck,
     handleLoss,
+    handleDisconnect,
   } = events(state, dispatch, socket);
   const { placeShips, handleSubmit, handleShot } = playHandler(
     socket,
@@ -39,6 +40,7 @@ function Play({ username }: Username) {
     socket.on('missed', () => handleMissed());
     socket.on('struck', (x, y) => handleStruck(x, y));
     socket.on('loss', (name) => handleLoss(name));
+    socket.on('opponentleft', (name) => handleDisconnect(name));
   }, [socket, state.bombsRemaining]);
 
   return (

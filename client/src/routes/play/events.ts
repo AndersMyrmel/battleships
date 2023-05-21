@@ -68,7 +68,6 @@ const events = (
   };
 
   const handleLoss = (name: string) => {
-    console.log(state.opponentName);
     dispatch({
       type: 'setmultiple',
       payload: {
@@ -79,6 +78,10 @@ const events = (
     });
   };
 
+  const handleDisconnect = (name: string) => {
+    dispatch({ type: 'setopponentname', payload: `${name} ❌` });
+  };
+
   return {
     setOpponent,
     setReady,
@@ -87,6 +90,7 @@ const events = (
     handleMissed,
     handleStruck,
     handleLoss,
+    handleDisconnect,
   };
 };
 

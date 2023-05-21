@@ -6,7 +6,8 @@ interface User {
 
 const events = (io, client, users: User) => {
   const handleDisconnect = () => {
-    // TODO: Socket.leave room & display in client
+    const opponent = users[client.id]?.opponent;
+    if (opponent) io.to(opponent).emit('opponentleft', users[client.id].name);
     delete users[client.id];
   };
 
@@ -22,6 +23,8 @@ const events = (io, client, users: User) => {
 
     const opponent = getOpponent();
     if (opponent) {
+      users[client.id].opponent = opponent;
+      users[opponent].opponent = client.id;
       io.to(client.id).emit('opponent', users[opponent].name);
       io.to(opponent).emit('opponent', users[client.id].name);
     }
@@ -50,6 +53,8 @@ const events = (io, client, users: User) => {
 
     const opponent = getOpponent();
     if (opponent) {
+      users[client.id].opponent = opponent;
+      users[opponent].opponent = client.id;
       io.to(client.id).emit('opponent', users[opponent].name);
       io.to(opponent).emit('opponent', users[client.id].name);
     }
@@ -57,12 +62,12 @@ const events = (io, client, users: User) => {
 
   const handleSubmitBoard = (board: number[][]) => {
     users[client.id].board = board;
-    const opponent = getOpponent();
+    const opponent = users[client.id]?.opponent;
     if (opponent) io.to(opponent).emit('ready', users[client.id].name);
   };
 
   const handleShot = (x: number, y: number) => {
-    const opponent = getOpponent();
+    const opponent = users[client.id]?.opponent;
     if (!opponent || !users[opponent].board) return;
 
     if (users[opponent].board[x][y] === 0) {
@@ -75,10 +80,8 @@ const events = (io, client, users: User) => {
   };
 
   const handleGameOver = () => {
-    const opponent = getOpponent();
-    if (opponent) {
-      io.to(opponent).emit('loss', users[client.id].name);
-    }
+    const opponent = users[client.id]?.opponent;
+    if (opponent) io.to(opponent).emit('loss', users[client.id].name);
   };
 
   const getOpponent = () => {
