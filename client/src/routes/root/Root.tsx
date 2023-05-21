@@ -50,7 +50,7 @@ function Root() {
     <>
       <Header username={state.username} />
       <div className="h-full flex flex-col items-center justify-start">
-        <h1 className="font-poppins font-bold text-8xl mt-32 mb-24">
+        <h1 className="font-poppins font-bold text-5xl md:text-7xl lg:text-8xl mt-32 mb-24">
           battleships
         </h1>
 
@@ -98,21 +98,21 @@ function Root() {
           </div>
         )}
 
-        <div>
+        <div className="flex flex-col md:flex-row lg:flex-row">
           <button
-            className="bg-rose-600 hover:bg-rose-500 h-14 w-36 font-poppins font-medium rounded mx-4"
+            className="bg-rose-600 hover:bg-rose-500 h-14 w-36 font-poppins font-medium rounded mx-4 my-2"
             onClick={createGame}
           >
             Create Game
           </button>
           <button
-            className="bg-amber-600 hover:bg-amber-500 h-14 w-36 font-poppins font-medium rounded mx-4"
+            className="bg-amber-600 hover:bg-amber-500 h-14 w-36 font-poppins font-medium rounded mx-4 my-2"
             onClick={joinGame}
           >
             Join Game
           </button>
           <button
-            className="bg-green-600 hover:bg-green-500 h-14 w-36 font-poppins font-medium rounded mx-4"
+            className="bg-green-600 hover:bg-green-500 h-14 w-36 font-poppins font-medium rounded mx-4 my-2 mb-4"
             onClick={playOnline}
           >
             Play Online
