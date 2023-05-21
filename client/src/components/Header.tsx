@@ -6,7 +6,7 @@ function Header({ username }: HeaderProps) {
   return (
     <header>
       <nav className="px-4 lg:px-6 py-2.5 dark:bg-inherit border-b border-neutral-700">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+        <div className="flex flex-wrap justify-around items-center mx-auto max-w-screen-xl">
           <a href="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
               🗺️ battleships
