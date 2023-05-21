@@ -48,15 +48,15 @@ function Play() {
       <Header username={state.username} />
       <div className="h-full flex justify-center items-center">
         <div className="flex text-center">
-          <div className="mx-10">
-            <h1 className="text-3xl font-poppins font-medium my-16">
+          <div className="lg:mx-10 sm:mx-5 xs:mx-5">
+            <h1 className="lg:text-3xl font-poppins font-medium my-16 sm:text-2xl xs:text-sm">
               {state.username}
             </h1>
             <div className="flex justify-between">
-              <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
+              <h1 className="lg:text-2xl font-poppins font-semibold lg:h-10 sm:h-8 xs:h-6 sm:text-xl xs:text-xs">
                 Place your ships 🧭
               </h1>
-              <h1 className="font-poppins font-semibold text-3xl">
+              <h1 className="font-poppins font-semibold lg:text-2xl sm:text-xl xs:text-xs">
                 🚢 {state.submitted ? `✔️` : `x${state.shipsRemaining}`}
               </h1>
             </div>
@@ -65,7 +65,7 @@ function Play() {
               className={
                 state.submitted
                   ? 'invisible mt-5 h-12'
-                  : 'bg-green-700 hover:bg-green-600 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
+                  : 'bg-green-700 hover:bg-green-600 mt-5 lg:h-12 lg:w-1/2 sm:h-8 sm:w-1/2 lg:text-lg sm:text-sm font-poppins rounded xs:w-1/2 xs:h-5 xs:text-xs'
               }
               onClick={handleSubmit}
             >
@@ -73,15 +73,15 @@ function Play() {
             </button>
           </div>
 
-          <div className="mx-10">
-            <h1 className="text-3xl font-poppins font-medium my-16">
+          <div className="lg:mx-10 sm:mx-5 xs:mx-5">
+            <h1 className="lg:text-3xl font-poppins font-medium my-16 sm:text-2xl xs:text-sm">
               {state.opponentName ?? 'Waiting for player...'}
             </h1>
             <div className="flex justify-between">
-              <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
+              <h1 className="lg:text-2xl font-poppins font-semibold lg:h-10 sm:h-8 xs:h-6 sm:text-xl xs:text-xs">
                 Shoot the enemy 🗺️
               </h1>
-              <h1 className="font-poppins font-semibold text-3xl">
+              <h1 className="font-poppins font-semibold lg:text-2xl sm:text-xl xs:text-xs">
                 💣 x{state.bombsRemaining}
               </h1>
             </div>
