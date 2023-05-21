@@ -11,10 +11,6 @@ const io = new Server(server);
 const users = {};
 let roomCount = 1;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 io.on('connection', (client) => {
   const {
     handleDisconnect,
