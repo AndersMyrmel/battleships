@@ -13,7 +13,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'play',
-    element: <Play username={''} />,
+    element: <Play />,
   },
 ]);
 

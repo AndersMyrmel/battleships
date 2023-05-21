@@ -6,6 +6,7 @@ import { playHandler } from '../../utils/playHandler';
 import { events } from './events';
 import PlayerBoard from '../../components/PlayerBoard';
 import EnemyBoard from '../../components/EnemyBoard';
+import Header from '../../components/Header';
 
 function Play() {
   const location = useLocation();
@@ -43,49 +44,52 @@ function Play() {
   }, [socket, state.bombsRemaining]);
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="flex text-center">
-        <div className="mx-10">
-          <h1 className="text-3xl font-poppins font-medium my-16">
-            {state.username}
-          </h1>
-          <div className="flex justify-between">
-            <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
-              Place your ships 🧭
+    <>
+      <Header username={state.username} />
+      <div className="h-full flex justify-center items-center">
+        <div className="flex text-center">
+          <div className="mx-10">
+            <h1 className="text-3xl font-poppins font-medium my-16">
+              {state.username}
             </h1>
-            <h1 className="font-poppins font-semibold text-3xl">
-              🚢 {state.submitted ? `✔️` : `x${state.shipsRemaining}`}
-            </h1>
+            <div className="flex justify-between">
+              <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
+                Place your ships 🧭
+              </h1>
+              <h1 className="font-poppins font-semibold text-3xl">
+                🚢 {state.submitted ? `✔️` : `x${state.shipsRemaining}`}
+              </h1>
+            </div>
+            <PlayerBoard grid={state.playerBoard} handleClick={placeShips} />
+            <button
+              className={
+                state.submitted
+                  ? 'invisible mt-5 h-12'
+                  : 'bg-green-700 hover:bg-green-600 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
+              }
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
           </div>
-          <PlayerBoard grid={state.playerBoard} handleClick={placeShips} />
-          <button
-            className={
-              state.submitted
-                ? 'invisible mt-5 h-12'
-                : 'bg-green-700 hover:bg-green-600 mt-5 h-12 w-1/2 inline-block font-poppins rounded'
-            }
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </div>
 
-        <div className="mx-10">
-          <h1 className="text-3xl font-poppins font-medium my-16">
-            {state.opponentName ?? 'Waiting for player...'}
-          </h1>
-          <div className="flex justify-between">
-            <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
-              Shoot the enemy 🗺️
+          <div className="mx-10">
+            <h1 className="text-3xl font-poppins font-medium my-16">
+              {state.opponentName ?? 'Waiting for player...'}
             </h1>
-            <h1 className="font-poppins font-semibold text-3xl">
-              💣 x{state.bombsRemaining}
-            </h1>
+            <div className="flex justify-between">
+              <h1 className="text-3xl font-poppins font-semibold w-2/3 h-12 inline-block">
+                Shoot the enemy 🗺️
+              </h1>
+              <h1 className="font-poppins font-semibold text-3xl">
+                💣 x{state.bombsRemaining}
+              </h1>
+            </div>
+            <EnemyBoard grid={state.enemyBoard} handleClick={handleShot} />
           </div>
-          <EnemyBoard grid={state.enemyBoard} handleClick={handleShot} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
