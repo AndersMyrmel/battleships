@@ -5,6 +5,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const { events } = require('./events');
+const db = require('./database');
 
 app.use(cors());
 const io = new Server(server);
@@ -21,29 +22,37 @@ io.on('connection', (client) => {
     handleShot,
     handleGameOver,
   } = events(io, client, users);
+  db.incrementVisits();
 
   client.on('username', (username: string) => {
     handleUsername(username, roomCount);
+    db.addUser(username);
     roomCount += 1;
   });
 
   client.on('creategame', (username: string) => {
     handleCreateGame(username);
+    db.addUser(username);
   });
 
   client.on('joingame', (username: string, hostname: string) => {
     handleJoinGame(username, hostname);
+    db.addUser(username);
   });
 
   client.on('submitboard', (board: number[][]) => {
     handleSubmitBoard(board);
+    db.incrementGamesStarted();
   });
 
   client.on('shot', (x: number, y: number) => {
     handleShot(x, y);
   });
 
-  client.on('gameover', handleGameOver);
+  client.on('gameover', () => {
+    handleGameOver();
+    db.incrementGamesCompleted();
+  });
 
   client.on('disconnect', handleDisconnect);
 });
