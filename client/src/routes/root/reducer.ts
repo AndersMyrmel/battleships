@@ -1,7 +1,7 @@
 import { RootState, Action } from '../../types/RootState';
 
 export const INITIAL_STATE = {
-  username: 'guest',
+  username: 'null,
   hostname: null,
   displayHost: false,
 };
