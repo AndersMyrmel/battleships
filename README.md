@@ -1,7 +1,7 @@
 <h1 align="center">battleships</h1>
 <div align="center">
  <strong>
-   <a href="https://dainty-blancmange-a09ae1.netlify.app/">
+   <a href="https://battleships.me">
     🗺️ Play online
    </a>
  </strong>
